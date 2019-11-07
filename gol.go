@@ -36,6 +36,29 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 			for x := 0; x < p.imageWidth; x++ {
 				// Placeholder for the actual Game of Life logic: flips alive cells to dead and dead cells to alive.
 				world[y][x] = world[y][x] ^ 0xFF
+				var sum = 0
+
+				for v:= -1; v < 2; y++ {
+					for h:=-1; h < 2; x++{
+						if world[y+v][x+h] == 0XFF {
+							sum = sum + 1
+						}else {
+							sum = sum
+						}
+					}
+				}
+
+				if sum < 2 && (world[y][x] == 0xFF) {
+					world[y][x] = world[y][x] ^ 0xFF
+				} else if sum == 2 || sum == 3 && (world[y][x] == 0xFF) {
+
+				} else if sum == 3 && world[y][x] != 0xFF {
+					world[y][x] = world[y][x] ^ 0xFF
+				} else if sum > 3 && (world[y][x] == 0xFF) {
+					world[y][x] = world[y][x] ^ 0xFF
+				} else {
+					
+				}
 			}
 		}
 	}

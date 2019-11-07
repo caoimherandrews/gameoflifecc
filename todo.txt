@@ -1,0 +1,29 @@
+To Do:
+- Help set up -> error
+- explain where the functions need to be written
+- go through baisc pan on how to get stage 1 done
+
+stage 1a:
+- output final state of board as PGM image, including size of board and number of turns processed in the filename:
+using writePgmImage in pgm.go, size of board an dnumber of turns passed into writePgmImage function
+- create a slice of cells that are alive and send it on the alive channel:
+using distributor in gol.go -> send on alive channel
+
+stage 1b:
+
+
+main.go
+- all channel -> given in structs e.g iodistributor
+gameoflife- > initialises lots of the channels
+- stage 1 -> channel for output of image
+output val channnels which hlds values
+pgm.go -> TODO
+
+main.go main called for build
+gof called for tests
+start go routines in gol function at bottom
+gol.go process game of life
+gol.go game of life login in 				world[y][x] = world[y][x] ^ 0xFF
+pgm.go TODO bit
+
+control.go -> stage 2./baseline
