@@ -35,15 +35,58 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 		for y := 0; y < p.imageHeight; y++ {
 			for x := 0; x < p.imageWidth; x++ {
 				// Placeholder for the actual Game of Life logic: flips alive cells to dead and dead cells to alive.
-				world[y][x] = world[y][x] ^ 0xFF
+				// world[y][x] = world[y][x] ^ 0xFF
 				var sum = 0
+				fmt.Printf("y: %s\n", y)
+								fmt.Printf("x: %s\n", x)
 
-				for v:= -1; v < 2; y++ {
-					for h:=-1; h < 2; x++{
-						if world[y+v][x+h] == 0XFF {
-							sum = sum + 1
-						}else {
-							sum = sum
+				if (x == 0) || (y == 0) || (x == p.imageWidth -1) || (y == p.imageHeight -1) {
+
+					var yplus = 0
+					var yminus = 0
+					var xplus = 0
+					var xminus = 0
+
+					if (y == 0) {
+						yplus = y+1
+						yminus = p.imageHeight -1
+					}
+	
+					if (y == p.imageHeight -1) {
+						yplus = 0
+						yminus = y-1
+					}
+	
+					if (x == 0) {
+						xplus = x+1
+						xminus = p.imageWidth -1
+					}
+	
+					if (x == p.imageWidth -1) {
+						xplus = 0
+						xminus = x-1
+					}
+
+					if world[yminus][xminus] == 0xFF {sum = sum + 1}
+					if world[yminus][x] == 0xFF {sum = sum + 1}
+					if world[yminus][xplus] == 0xFF {sum = sum + 1}
+
+					if world[y][xminus] == 0xFF {sum = sum + 1}
+					if world[y][xplus] == 0xFF {sum = sum + 1}
+
+					if world[yplus][xminus] == 0xFF {sum = sum + 1}
+					if world[yplus][x] == 0xFF {sum = sum + 1}
+					if world[yplus][xplus] == 0xFF {sum = sum + 1}
+					
+				} else {
+
+					for vertical:= -1; vertical < 2; y++ {
+						for horizontal:=-1; horizontal < 2; x++{
+							if world[y+vertical][x+horizontal] == 0XFF {																
+								sum = sum + 1
+							}else {
+								sum = sum
+							}
 						}
 					}
 				}
