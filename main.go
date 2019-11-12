@@ -36,7 +36,7 @@ type distributorToIo struct {
 	idle    <-chan bool
 
 	filename  chan<- string
-	inputVal  <-chan uint8
+	inputVal  <-chan uint8 //either make this bidirectiional or create new output channel, output val better way of doing it
 	// outputVal <-chan uint8
 }
 
@@ -92,7 +92,9 @@ func gameOfLife(p golParams, keyChan <-chan rune) []cell {
 	aliveCells := make(chan []cell)
 
 	go distributor(p, dChans, aliveCells)
-	go pgmIo(p, ioChans)
+	go pgmIo(p, ioChans) //use this thread to write to disk -> output board -> for loop inside pgmio and distributor -> 1b start wroker threads in 1b
+	//for i = 1 to numberworker
+	// go woker(...) 8 workers with channels
 
 	alive := <-aliveCells
 	return alive
@@ -123,7 +125,7 @@ func main() {
 
 	flag.Parse()
 
-	params.turns = 10000000000
+	params.turns = 5 //change to speed up tests ect default 10000000000 
 
 	startControlServer(params)
 	gameOfLife(params, nil)

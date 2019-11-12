@@ -27,3 +27,8 @@ gol.go game of life login in 				world[y][x] = world[y][x] ^ 0xFF
 pgm.go TODO bit
 
 control.go -> stage 2./baseline
+
+
+-- print board function into terminal
+-- need to write into a new board -> world[y][x] -> write to target array, source array target array
+--test and do benchmar at each stage e.g 1a 1b

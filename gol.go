@@ -12,17 +12,17 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	// Create the 2D slice to store the world.
 	world := make([][]byte, p.imageHeight)
 	for i := range world {
-		world[i] = make([]byte, p.imageWidth)
+		world[i] = make([]byte, p.imageWidth) //two of these, one for source, one for target
 	}
 
-	// Request the io goroutine to read in the image with the given filename.
+	// Request the io goroutine to read in the image with the given filename. //these lines chnage to output, send to outpuVal
 	d.io.command <- ioInput
 	d.io.filename <- strings.Join([]string{strconv.Itoa(p.imageWidth), strconv.Itoa(p.imageHeight)}, "x")
 
 	// The io goroutine sends the requested image byte by byte, in rows.
 	for y := 0; y < p.imageHeight; y++ {
 		for x := 0; x < p.imageWidth; x++ {
-			val := <-d.io.inputVal
+			val := <-d.io.inputVal //mkae this cannel no directionsla anymore
 			if val != 0 {
 				fmt.Println("Alive cell at", x, y)
 				world[y][x] = val
@@ -37,8 +37,6 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 				// Placeholder for the actual Game of Life logic: flips alive cells to dead and dead cells to alive.
 				// world[y][x] = world[y][x] ^ 0xFF
 				var sum = 0
-				fmt.Printf("y: %s\n", y)
-								fmt.Printf("x: %s\n", x)
 
 				if (x == 0) || (y == 0) || (x == p.imageWidth -1) || (y == p.imageHeight -1) {
 
