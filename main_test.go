@@ -158,6 +158,56 @@ func Test(t *testing.T) {
 				{x: 14, y: 15},
 			},
 		}},
+		
+		//stage 3 tests added below uncomment
+		// {"16x16x8-100", args{
+		// 	p: golParams{
+		// 		turns:       100,
+		// 		threads:     6,
+		// 		imageWidth:  16,
+		// 		imageHeight: 16,
+		// 	},
+		// 	expectedAlive: []cell{
+		// 		{x: 12, y: 0},
+		// 		{x: 13, y: 0},
+		// 		{x: 14, y: 0},
+		// 		{x: 13, y: 14},
+		// 		{x: 14, y: 15},
+		// 	},
+		// }},
+
+		// {"16x16x8-100", args{
+		// 	p: golParams{
+		// 		turns:       100,
+		// 		threads:     10,
+		// 		imageWidth:  16,
+		// 		imageHeight: 16,
+		// 	},
+		// 	expectedAlive: []cell{
+		// 		{x: 12, y: 0},
+		// 		{x: 13, y: 0},
+		// 		{x: 14, y: 0},
+		// 		{x: 13, y: 14},
+		// 		{x: 14, y: 15},
+		// 	},
+		// }},
+
+		// {"16x16x8-100", args{
+		// 	p: golParams{
+		// 		turns:       100,
+		// 		threads:     12,
+		// 		imageWidth:  16,
+		// 		imageHeight: 16,
+		// 	},
+		// 	expectedAlive: []cell{
+		// 		{x: 12, y: 0},
+		// 		{x: 13, y: 0},
+		// 		{x: 14, y: 0},
+		// 		{x: 13, y: 14},
+		// 		{x: 14, y: 15},
+		// 	},
+		// }},
+
 
 		// Special test to be used to generate traces - not a real test
 		//{"trace", args{
