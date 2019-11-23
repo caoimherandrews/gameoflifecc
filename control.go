@@ -7,6 +7,11 @@ import (
 
 // getKeyboardCommand sends all keys pressed on the keyboard as runes (characters) on the key chan.
 // getKeyboardCommand will NOT work if termbox isn't initialised (in startControlServer)
+// stage 2a here!
+// if s is pressed gerneate a pgm file with the current stage of the board
+// if p is pressed pause the processing and print board and if its pressed again resume processing
+// if q is pressed generate a pgm file with the final state of the program
+
 func getKeyboardCommand(key chan<- rune) {
 	for {
 		event := termbox.PollEvent()

@@ -13,7 +13,7 @@ type golParams struct {
 // ioCommand allows requesting behaviour from the io (pgm) goroutine.
 type ioCommand uint8
 
-// This is a way of creating enums in Go.
+// This is a way of creating enums (your own types) in Go.
 // It will evaluate to:
 //		ioOutput 	= 0
 //		ioInput 	= 1
@@ -49,7 +49,7 @@ type ioToDistributor struct {
 	inputVal chan uint8
 }
 
-// distributorChans stores all the chans that the distributor goroutine will use.
+// distributorChans stores all the channels (chans) that the distributor goroutine will use.
 type distributorChans struct {
 	io distributorToIo
 }
