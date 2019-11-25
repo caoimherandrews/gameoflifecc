@@ -1,7 +1,7 @@
 To Do:
-- Help set up -> error
-- explain where the functions need to be written
-- go through baisc pan on how to get stage 1 done
+- Get error on game implementation fixed
+- do stage 1a and 1b
+- get information about stage 2
 
 stage 1a:
 - output final state of board as PGM image, including size of board and number of turns processed in the filename:
