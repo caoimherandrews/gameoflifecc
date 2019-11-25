@@ -7,12 +7,20 @@ import (
 )
 
 // distributor divides the work between workers and interacts with other goroutines.
+// whole program is the distributor function for now
+// does the game logic need to be in a different function?
 func distributor(p golParams, d distributorChans, alive chan []cell) {
 
 	// Create the 2D slice to store the world.
+	// Two of these, one for source, one for target
 	world := make([][]byte, p.imageHeight)
 	for i := range world {
-		world[i] = make([]byte, p.imageWidth) //two of these, one for source, one for target
+		world[i] = make([]byte, p.imageWidth)
+	}
+	// Create the 2D slice to store the new world.
+	newWorld := make([][]byte, p.imageHeight)
+	for i := range world {
+		newWorld[i] = make([]byte, p.imageWidth)
 	}
 
 		// Create the 2D slice to store the new world.
@@ -28,7 +36,7 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	// The io goroutine sends the requested image byte by byte, in rows.
 	for y := 0; y < p.imageHeight; y++ {
 		for x := 0; x < p.imageWidth; x++ {
-			val := <-d.io.inputVal 
+			val := <-d.io.inputVal
 			if val != 0 {
 				fmt.Println("Alive cell at", x, y)
 				world[y][x] = val
@@ -40,12 +48,13 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	for turns := 0; turns < p.turns; turns++ {
 		for y := 0; y < p.imageHeight; y++ {
 			for x := 0; x < p.imageWidth; x++ {
+<<<<<<< HEAD
 				// Placeholder for the actual Game of Life logic: flips alive cells to dead and dead cells to alive.
 				// world[y][x] = world[y][x] ^ 0xFF
 				workerHeight := p.imageHeight / p.threads
 				out := make([]chan [][]uint8, p.threads)
 				for i := range out {
-					out[i] = make(chan [][]uint8) //meemory changes -> needs to chnage
+					out[i] = make(chan [][]uint8) //memory changes -> needs to chnage
 				}
 				
 				for i := 0; i < p.threads; i++ {
@@ -101,11 +110,23 @@ func worker(world[y][x], d distributorChans){
 
 				if (x == 0) || (y == 0) || (x == maxWidth) || (y == maxHeight) {
 
+=======
+				var sum = 0
+				var maxWidth = p.imageWidth - 1
+				var maxHeight = p.imageHeight - 1
+
+				// if image width or height is 0 or max -> edge cases switch statement better?
+				if (x == 0) || (y == 0) || (x == maxWidth) || (y == maxHeight) {
+
+					// edge cases
+					// is declaring these necessary
+>>>>>>> be1c70d4e9ca81cbf78fce9bcd5cbfe685df5159
 					var yplus = y + 1
 					var yminus = y - 1
 					var xplus = x + 1
 					var xminus = x - 1
 
+<<<<<<< HEAD
 					if (y == 0) {
 						fmt.Println(y, "here 1")
 						yplus = y+1
@@ -126,28 +147,66 @@ func worker(world[y][x], d distributorChans){
 	
 					if (x == maxWidth) {
 						fmt.Println(x, "here 2")
-						xplus = 0
-						xminus = x-1
+=======
+					if y == 0 {
+						yplus = y + 1
+						yminus = maxHeight
 					}
 
-					if world[yminus][xminus] == 0xFF {sum = sum + 1}
-					if world[yminus][x] == 0xFF {sum = sum + 1}
-					if world[yminus][xplus] == 0xFF {sum = sum + 1}
+					if y == maxHeight {
+						yplus = 0
+						yminus = y - 1
+					}
 
-					if world[y][xminus] == 0xFF {sum = sum + 1}
-					if world[y][xplus] == 0xFF {sum = sum + 1}
+					if x == 0 {
+						xplus = x + 1
+						xminus = maxWidth
+					}
 
-					if world[yplus][xminus] == 0xFF {sum = sum + 1}
-					if world[yplus][x] == 0xFF {sum = sum + 1}
-					if world[yplus][xplus] == 0xFF {sum = sum + 1}
-					
+					if x == maxWidth {
+>>>>>>> be1c70d4e9ca81cbf78fce9bcd5cbfe685df5159
+						xplus = 0
+						xminus = x - 1
+					}
+
+					if world[yminus][xminus] == 0xFF {
+						sum = sum + 1
+					} // sum++
+					if world[yminus][x] == 0xFF {
+						sum = sum + 1
+					}
+					if world[yminus][xplus] == 0xFF {
+						sum = sum + 1
+					}
+
+					if world[y][xminus] == 0xFF {
+						sum = sum + 1
+					}
+					if world[y][xplus] == 0xFF {
+						sum = sum + 1
+					}
+
+					if world[yplus][xminus] == 0xFF {
+						sum = sum + 1
+					}
+					if world[yplus][x] == 0xFF {
+						sum = sum + 1
+					}
+					if world[yplus][xplus] == 0xFF {
+						sum = sum + 1
+					}
+
+					// If your not on the edge?
 				} else {
 
-					for vertical:= -1; vertical < 2; y++ {
-						for horizontal:=-1; horizontal < 2; x++{
-							if world[y+vertical][x+horizontal] == 0XFF {																
+					// Intellij says that the conditions are always true
+					// What case are you trying to cover here
+					for vertical := -1; vertical < 2; y++ {
+						for horizontal := -1; horizontal < 2; x++ {
+							if world[y+vertical][x+horizontal] == 0xFF {
 								sum = sum + 1
-							}else {
+							} else {
+								// is this necessary?
 								sum = sum
 							}
 						}
@@ -163,7 +222,29 @@ func worker(world[y][x], d distributorChans){
 				} else if sum > 3 && (world[y][x] == 0xFF) {
 					world[y][x] = new_world[y][x] ^ 0xFF
 				} else {
-					
+
 				}
-				d.io.inputVal <- new_world[y][x]
+				d.io.inputVal <- newWorld[y][x]
+			}
+		}
+	}
+
+	// Create an empty slice to store coordinates of cells that are still alive after p.turns are done.
+	var finalAlive []cell
+	// Go through the world and append the cells that are still alive.
+
+	for y := 0; y < p.imageHeight; y++ {
+		for x := 0; x < p.imageWidth; x++ {
+			if world[y][x] != 0 {
+				finalAlive = append(finalAlive, cell{x: x, y: y})
+			}
+		}
+	}
+
+	// Make sure that the Io has finished any output before exiting.
+	d.io.command <- ioCheckIdle
+	<-d.io.idle
+
+	// Return the coordinates of cells that are still alive.
+	alive <- finalAlive
 }
