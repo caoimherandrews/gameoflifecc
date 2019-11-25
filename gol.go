@@ -48,34 +48,10 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	for turns := 0; turns < p.turns; turns++ {
 		for y := 0; y < p.imageHeight; y++ {
 			for x := 0; x < p.imageWidth; x++ {
-<<<<<<< HEAD
 				// Placeholder for the actual Game of Life logic: flips alive cells to dead and dead cells to alive.
 				// world[y][x] = world[y][x] ^ 0xFF
-				workerHeight := p.imageHeight / p.threads
-				out := make([]chan [][]uint8, p.threads)
-				for i := range out {
-					out[i] = make(chan [][]uint8) //memory changes -> needs to chnage
-				}
-				
-				for i := 0; i < p.threads; i++ {
-					start := i*workerHeight
-					slice_world[i] = make([]byte, workerHeight + 2)
-					top := start - 1
-					if start == 0 {
-						top = p.imageHeight - 1
-					}
-					bottom := start + workerHeight
-					if start == p.imageHeight - workerHeight {
-						bottom = 0
-					}
-					
-					slice_world[i] = append(slice_world[i], top)
-					for s:= start; s < bottom; s++ {
-						slice_world[i] = append(slice_world[i], s)
-					}
-					slice_world[i] = append(slice_world[i], bottom)
-					go worker(slice_world[i])
-				}
+				go splitUpBoard()
+
 			}
 		}
 	}
@@ -102,6 +78,34 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	alive <- finalAlive
 }
 
+func splitUpBoard(){
+	workerHeight := p.imageHeight / p.threads
+	out := make([]chan [][]uint8, p.threads)
+	for i := range out {
+		out[i] = make(chan [][]uint8) //memory changes -> needs to chnage
+	}
+	
+	for i := 0; i < p.threads; i++ {
+		start := i*workerHeight
+		slice_world[i] = make([]byte, workerHeight + 2)
+		top := start - 1
+		if start == 0 {
+			top = p.imageHeight - 1
+		}
+		bottom := start + workerHeight
+		if start == p.imageHeight - workerHeight {
+			bottom = 0
+		}
+		
+		slice_world[i] = append(slice_world[i], top)
+		for s:= start; s < bottom; s++ {
+			slice_world[i] = append(slice_world[i], s)
+		}
+		slice_world[i] = append(slice_world[i], bottom)
+		go worker(slice_world[i])
+	}
+}
+
 func worker(world[y][x], d distributorChans){
 	var sum = 0
 				var maxWidth = p.imageWidth - 1
@@ -110,61 +114,27 @@ func worker(world[y][x], d distributorChans){
 
 				if (x == 0) || (y == 0) || (x == maxWidth) || (y == maxHeight) {
 
-=======
-				var sum = 0
-				var maxWidth = p.imageWidth - 1
-				var maxHeight = p.imageHeight - 1
-
-				// if image width or height is 0 or max -> edge cases switch statement better?
-				if (x == 0) || (y == 0) || (x == maxWidth) || (y == maxHeight) {
-
-					// edge cases
-					// is declaring these necessary
->>>>>>> be1c70d4e9ca81cbf78fce9bcd5cbfe685df5159
 					var yplus = y + 1
 					var yminus = y - 1
 					var xplus = x + 1
 					var xminus = x - 1
 
-<<<<<<< HEAD
 					if (y == 0) {
-						fmt.Println(y, "here 1")
 						yplus = y+1
 						yminus = maxHeight
 					}
 	
 					if (y == maxHeight) {
-						fmt.Println(y, "here4")
 						yplus = 0
 						yminus = y-1  
 					}
 	
 					if (x == 0) {
-						fmt.Println(x,"here3")
 						xplus = x+1
 						xminus = maxWidth
 					}
 	
 					if (x == maxWidth) {
-						fmt.Println(x, "here 2")
-=======
-					if y == 0 {
-						yplus = y + 1
-						yminus = maxHeight
-					}
-
-					if y == maxHeight {
-						yplus = 0
-						yminus = y - 1
-					}
-
-					if x == 0 {
-						xplus = x + 1
-						xminus = maxWidth
-					}
-
-					if x == maxWidth {
->>>>>>> be1c70d4e9ca81cbf78fce9bcd5cbfe685df5159
 						xplus = 0
 						xminus = x - 1
 					}
