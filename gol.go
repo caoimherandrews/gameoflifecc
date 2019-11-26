@@ -7,9 +7,12 @@ import (
 )
 
 // distributor divides the work between workers and interacts with other goroutines.
+// whole program is the distributor function for now
+// does the game logic need to be in a different function?
 func distributor(p golParams, d distributorChans, alive chan []cell) {
 
 	// Create the 2D slice to store the world.
+	// Two of these, one for source, one for target
 	world := make([][]byte, p.imageHeight)
 	for i := range world {
 		world[i] = make([]byte, p.imageWidth)
@@ -28,7 +31,7 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	// The io goroutine sends the requested image byte by byte, in rows.
 	for y := 0; y < p.imageHeight; y++ {
 		for x := 0; x < p.imageWidth; x++ {
-			val := <-d.io.inputVal 
+			val := <-d.io.inputVal
 			if val != 0 {
 				fmt.Println("Alive cell at", x, y)
 				world[y][x] = val
@@ -48,6 +51,7 @@ func distributor(p golParams, d distributorChans, alive chan []cell) {
 	// Create an empty slice to store coordinates of cells that are still alive after p.turns are done.
 	var finalAlive []cell
 	// Go through the world and append the cells that are still alive.
+
 	for y := 0; y < p.imageHeight; y++ {
 		for x := 0; x < p.imageWidth; x++ {
 			if world[y][x] != 0 {

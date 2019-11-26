@@ -13,7 +13,7 @@ type golParams struct {
 // ioCommand allows requesting behaviour from the io (pgm) goroutine.
 type ioCommand uint8
 
-// This is a way of creating enums in Go.
+// This is a way of creating enums (your own types) in Go.
 // It will evaluate to:
 //		ioOutput 	= 0
 //		ioInput 	= 1
@@ -29,14 +29,14 @@ type cell struct {
 	x, y int
 }
 
-// distributorToIo defines all chans that the distributor goroutine will have to communicate with the io goroutine.
+// distributorToIo defines all chans (channels) that the distributor goroutine will have to communicate with the io goroutine.
 // Note the restrictions on chans being send-only or receive-only to prevent bugs.
 type distributorToIo struct {
 	command chan<- ioCommand
 	idle    <-chan bool
 
-	filename  chan<- string
-	inputVal  chan uint8 
+	filename chan<- string
+	inputVal chan uint8
 }
 
 // ioToDistributor defines all chans that the io goroutine will have to communicate with the distributor goroutine.
@@ -45,11 +45,11 @@ type ioToDistributor struct {
 	command <-chan ioCommand
 	idle    chan<- bool
 
-	filename  <-chan string
-	inputVal  chan uint8
+	filename <-chan string
+	inputVal chan uint8
 }
 
-// distributorChans stores all the chans that the distributor goroutine will use.
+// distributorChans stores all the channels (chans) that the distributor goroutine will use.
 type distributorChans struct {
 	io distributorToIo
 }
@@ -86,7 +86,9 @@ func gameOfLife(p golParams, keyChan <-chan rune) []cell {
 	aliveCells := make(chan []cell)
 
 	go distributor(p, dChans, aliveCells)
-	go pgmIo(p, ioChans)
+	go pgmIo(p, ioChans) //1b start wroker threads in 1b
+	//for i = 1 to numberworker
+	// go woker(...) 8 workers with channels
 
 	alive := <-aliveCells
 	return alive
@@ -117,7 +119,7 @@ func main() {
 
 	flag.Parse()
 
-	params.turns = 1 //change to speed up tests ect default 10000000000 
+	params.turns = 1 //change to speed up tests ect default 10000000000
 
 	startControlServer(params)
 	go getKeyboardCommand(nil)
